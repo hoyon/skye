@@ -26,7 +26,9 @@ defmodule Ema.MixProject do
   # Run "mix help deps" to learn about dependencies.
   defp deps do
     [
-      {:poolboy, "~> 1.5.1"}
+      {:honeydew, "~> 1.1"},
+      {:tesla, "~> 1.0"},
+      {:jason, "~> 1.0"}
     ]
   end
 end

@@ -6,19 +6,12 @@ defmodule Ema.Application do
   def start(_type, _args) do
     children = [
       Ema.Server,
-      :poolboy.child_spec(:ema, poolboy_config())
+      Honeydew.queue_spec(:ema),
+      Honeydew.worker_spec(:ema, {Ema.Worker, []}, num: 5, init_retry_secs: 10)
     ]
 
     opts = [strategy: :one_for_one, name: Ema.Supervisor]
     Supervisor.start_link(children, opts)
   end
 
-  defp poolboy_config do
-    [
-      {:name, {:local, :ema}},
-      {:worker_module, Ema.ScriptSupervisor},
-      {:size, 5},
-      {:max_overflow, 2}
-    ]
-  end
 end
