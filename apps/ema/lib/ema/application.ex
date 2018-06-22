@@ -6,6 +6,7 @@ defmodule Ema.Application do
   def start(_type, _args) do
     children = [
       Ema.Server,
+      Ema.ServiceRegistry,
       Honeydew.queue_spec(:ema),
       Honeydew.worker_spec(:ema, {Ema.Worker, []}, num: 5, init_retry_secs: 10)
     ]

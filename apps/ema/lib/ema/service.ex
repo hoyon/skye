@@ -12,22 +12,31 @@ defmodule Ema.Service do
     quote do
       @behaviour Ema.Service
       import Ema.Service
+
     end
   end
 
-  defmacro action(act, input, response, do: body) do
-    # TODO check input is correct
+  defmacro action(act, input, output, do: body) do
+    fun_name = :"ema_action_#{act}"
 
-    # TODO store input and response in ets or something
+    info_ast = quote do
+      def unquote(fun_name)() do
+        %{action: unquote(act), input: unquote(input), response: unquote(output)}
+      end
+    end
 
     # Not really sure why this works
     args = Macro.escape({:args, [], nil})
     body = Macro.escape(body, unquote: true)
 
-    quote bind_quoted: [act: act, args: args, body: body] do
+    act_ast = quote bind_quoted: [fun_name: fun_name, act: act, args: args, body: body] do
+
       def action(unquote(act), unquote(args), state) do
         unquote(body)
       end
     end
+
+    [info_ast, act_ast]
   end
+
 end

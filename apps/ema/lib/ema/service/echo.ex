@@ -5,16 +5,16 @@ defmodule Ema.Service.Echo do
     message: :string
   }
 
-  @response %{
+  @output %{
     message: :string
   }
 
-  def init(_) do
-    {:ok, %{}}
+  action :echo, @input, @output do
+    {:ok, args}
   end
 
-  action :echo, @input, @response do
-    {:ok, args}
+  def init(_) do
+    {:ok, %{}}
   end
 
 end
