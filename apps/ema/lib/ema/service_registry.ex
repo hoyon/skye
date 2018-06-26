@@ -1,4 +1,9 @@
 defmodule Ema.ServiceRegistry do
+  @moduledoc
+  """
+  Module which keeps track of all services which Ema can use
+  """
+
   use GenServer
 
   ## API
@@ -7,27 +12,27 @@ defmodule Ema.ServiceRegistry do
     GenServer.start_link(__MODULE__, [], name: __MODULE__)
   end
 
-  def register(mod, action, input, response) do
-    GenServer.cast(__MODULE__, {:register, mod, action, input, response})
-  end
-
   def status do
     GenServer.call(__MODULE__, :status)
+  end
+
+  def all_services do
+    get_services
   end
 
   ## Callback
 
   def init(_) do
     table = :ets.new(:service_registry, [:set, :protected])
+
+    get_services()
+    |> Enum.each(fn service ->
+      :ets.insert(table, {service, Ema.Service.actions(service)})
+    end)
     {:ok, %{table: table}}
   end
 
-  def handle_cast({:register, mod, action, input, response}, %{table: table} = state) do
-    :ets.insert(table, {{mod, action}, {input, response}})
-    {:noreply, state}
-  end
-
-  def handle_call(:status, %{table: table} = state) do
+  def handle_call(:status, _from,  %{table: table} = state) do
     {:reply, :ets.tab2list(table), state}
   end
 
