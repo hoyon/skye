@@ -1,6 +1,9 @@
 defmodule Ema.Service.Placeholder do
   use Ema.Service
 
+  name "Json Placeholder"
+  description "Get data from the JSON placeholder service"
+
   defmodule Api do
     use Tesla
 
@@ -22,10 +25,6 @@ defmodule Ema.Service.Placeholder do
     title: :string,
     body: :string
   }
-
-  def init(_) do
-    {:ok, %{}}
-  end
 
   # def action(:get_post, [id], state) do
   #   {:ok, res} = Api.get_post(id)
