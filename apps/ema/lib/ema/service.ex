@@ -2,6 +2,8 @@ defmodule Ema.Service do
   @callback init([term]) :: {:ok, term} | {:error, String.t()}
   @callback action(atom, term, term) :: {:ok, term} | {:error, String.t()}
 
+  @action_prefix "__ema_action_"
+
   def run(service, action, args) do
     # TODO: properly store state
     state = %{}
@@ -17,7 +19,7 @@ defmodule Ema.Service do
   end
 
   defmacro action(act, input, output, do: body) do
-    fun_name = :"ema_action_#{act}"
+    fun_name = :"#{@action_prefix}#{act}"
 
     info_ast = quote do
       def unquote(fun_name)() do
@@ -37,6 +39,18 @@ defmodule Ema.Service do
     end
 
     [info_ast, act_ast]
+  end
+
+  def actions(service) when is_atom(service) do
+    service.__info__(:functions)
+    |> Enum.filter(fn {fun, arity} ->
+      String.starts_with?("#{fun}", @action_prefix) and arity == 0
+    end)
+    |> Enum.map(fn {fun, 0} ->
+      name = String.replace_prefix("#{fun}", @action_prefix, "")
+      info = apply(service, fun, [])
+      {name, info}
+    end)
   end
 
 end
