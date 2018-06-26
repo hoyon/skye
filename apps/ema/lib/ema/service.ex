@@ -1,5 +1,4 @@
 defmodule Ema.Service do
-
   @action_prefix "__ema_action_"
 
   def run(service, action, args) do

@@ -14,5 +14,4 @@ defmodule Ema.Application do
     opts = [strategy: :one_for_one, name: Ema.Supervisor]
     Supervisor.start_link(children, opts)
   end
-
 end

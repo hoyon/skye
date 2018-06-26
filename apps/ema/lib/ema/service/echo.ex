@@ -15,5 +15,4 @@ defmodule Ema.Service.Echo do
   action :echo, @input, @output do
     {:ok, args}
   end
-
 end

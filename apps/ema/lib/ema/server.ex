@@ -10,5 +10,4 @@ defmodule Ema.Server do
   def init(:ok) do
     {:ok, %{}}
   end
-
 end

@@ -31,7 +31,7 @@ defmodule Ema.ServiceRegistry do
     {:ok, %{table: table}}
   end
 
-  def handle_call(:status, _from,  %{table: table} = state) do
+  def handle_call(:status, _from, %{table: table} = state) do
     {:reply, :ets.tab2list(table), state}
   end
 
@@ -47,6 +47,7 @@ defmodule Ema.ServiceRegistry do
   # ie are of form Ema.Service.<something>
   defp get_services do
     {:ok, mods} = :application.get_key(:ema, :modules)
+
     mods
     |> Enum.filter(fn mod ->
       split = Module.split(mod)
@@ -60,5 +61,4 @@ defmodule Ema.ServiceRegistry do
       :ets.insert(table, {service, Ema.Service.actions(service), Ema.Service.metadata(service)})
     end)
   end
-
 end
