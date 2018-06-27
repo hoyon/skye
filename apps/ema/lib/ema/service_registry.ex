@@ -51,7 +51,10 @@ defmodule Ema.ServiceRegistry do
     mods
     |> Enum.filter(fn mod ->
       split = Module.split(mod)
-      length(split) == 3 and Enum.take(split, 2) == ["Ema", "Service"]
+      functions = mod.__info__(:functions)
+
+      length(split) == 3 and Enum.take(split, 2) == ["Ema", "Service"] and
+        Keyword.has_key?(functions, :__ema_service)
     end)
   end
 

@@ -1,15 +1,20 @@
 defmodule Ema.Service do
   @action_prefix "__ema_action_"
+  @type_prefix "__ema_type_"
+
+  defmodule Metadata do
+    defstruct name: nil, description: nil
+  end
 
   def run(service, action, args) do
-    # TODO: properly store state
-    state = %{}
-    service.action(action, args, state)
+    service.action(action, args)
   end
 
   defmacro __using__(_opts) do
     quote do
       import Ema.Service
+
+      def __ema_service, do: true
     end
   end
 
@@ -29,7 +34,7 @@ defmodule Ema.Service do
 
     act_ast =
       quote bind_quoted: [fun_name: fun_name, act: act, args: args, body: body] do
-        def action(unquote(act), unquote(args), state) do
+        def action(unquote(act), unquote(args)) do
           unquote(body)
         end
       end
@@ -81,5 +86,70 @@ defmodule Ema.Service do
       end
 
     %{name: name, description: description}
+  end
+
+  defmodule Type do
+    @moduledoc """
+    Functions for type definition DSL
+    """
+
+    defstruct name: nil, description: nil, properties: %{}
+
+    def description(t, d) do
+      %{t | description: d}
+    end
+
+    def property(t, name, type, description \\ nil) do
+      updated = Map.put(t.properties, name, %Type{name: name, description: description})
+      %{t | properties: updated}
+    end
+
+    defmacro properties(t, block) do
+      exprs =
+        case block do
+          [do: {:__block__, _, exprs}] -> exprs
+          [do: expr] -> [expr]
+        end
+
+      body =
+        exprs
+        |> Enum.map(fn {name, line, args} -> {:property, line, [name | args]} end)
+        |> Enum.reduce(t, fn expr, acc ->
+          quote do
+            unquote(acc) |> unquote(expr)
+          end
+        end)
+
+      body
+    end
+  end
+
+  defmacro type(name, block) do
+    exprs =
+      case block do
+        [do: {:__block__, _, exprs}] -> exprs
+        [do: expr] -> [expr]
+      end
+
+    acc =
+      quote do
+        %Type{name: unquote(name)}
+      end
+
+    body =
+      Enum.reduce(exprs, acc, fn expr, acc ->
+        quote do
+          unquote(acc) |> unquote(expr)
+        end
+      end)
+
+    fun_name = :"#{@type_prefix}#{name}"
+
+    quote do
+      def unquote(fun_name)() do
+        import Type
+        unquote(body)
+      end
+    end
   end
 end

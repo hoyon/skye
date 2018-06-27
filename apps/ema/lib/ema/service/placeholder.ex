@@ -5,6 +5,7 @@ defmodule Ema.Service.Placeholder do
   description "Get data from the JSON placeholder service"
 
   defmodule Api do
+    @moduledoc false
     use Tesla
 
     plug(Tesla.Middleware.BaseUrl, "https://jsonplaceholder.typicode.com")
@@ -12,6 +13,16 @@ defmodule Ema.Service.Placeholder do
 
     def get_post(id) do
       get("/posts/" <> id)
+    end
+  end
+
+  type "post" do
+    description "A post"
+    properties do
+      userId :string, "The user id"
+      id :number, "The post id"
+      title :string, "The title of the post"
+      body :string, "The body of the post"
     end
   end
 
