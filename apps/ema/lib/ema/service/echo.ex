@@ -4,15 +4,7 @@ defmodule Ema.Service.Echo do
   name "Echo service"
   description "Returns the input string unchanged"
 
-  @input %{
-    message: :string
-  }
-
-  @output %{
-    message: :string
-  }
-
-  action :echo, @input, @output do
-    {:ok, args}
+  action :echo, :string, :string do
+    {:ok, input}
   end
 end
