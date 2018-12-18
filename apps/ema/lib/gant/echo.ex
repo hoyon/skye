@@ -1,4 +1,4 @@
-defmodule Ema.Service.Echo do
+defmodule Gant.Echo do
   use Ema.Service
 
   name "Echo service"

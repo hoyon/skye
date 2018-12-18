@@ -1,4 +1,4 @@
-defmodule Ema.Service.Placeholder do
+defmodule Gant.Placeholder do
   use Ema.Service
 
   name "Json Placeholder"
@@ -30,5 +30,4 @@ defmodule Ema.Service.Placeholder do
     {:ok, res} = Api.get_post(input)
     {:ok, res.body}
   end
-
 end

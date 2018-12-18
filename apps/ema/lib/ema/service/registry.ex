@@ -1,4 +1,4 @@
-defmodule Ema.ServiceRegistry do
+defmodule Ema.Service.Registry do
   @moduledoc """
   Module which keeps track of all services which Ema can use
   """
@@ -45,16 +45,14 @@ defmodule Ema.ServiceRegistry do
 
   # Get all modules which are services
   # ie are of form Ema.Service.<something>
-  defp get_services do
-    {:ok, mods} = :application.get_key(:ema, :modules)
+  defp get_services(otp_app \\ :ema) do
+    {:ok, mods} = :application.get_key(otp_app, :modules)
 
     mods
     |> Enum.filter(fn mod ->
-      split = Module.split(mod)
       functions = mod.__info__(:functions)
 
-      length(split) == 3 and Enum.take(split, 2) == ["Ema", "Service"] and
-        Keyword.has_key?(functions, :__ema_service)
+      Keyword.has_key?(functions, :__ema_service)
     end)
   end
 
