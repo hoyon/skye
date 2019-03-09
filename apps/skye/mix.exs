@@ -27,7 +27,8 @@ defmodule Skye.MixProject do
   defp deps do
     [
       {:postgrex, ">= 0.0.0"},
-      {:ecto, "~> 2.1"}
+      {:ecto_sql, "~> 3.0"},
+      {:phoenix_ecto, "~> 4.0"}
     ]
   end
 end
