@@ -36,7 +36,7 @@ defmodule Ema.ServiceTest do
     end
 
     test "creates function which contains type information" do
-      assert Service2.__ema_action_echo() == %{action: :echo, input: :string, response: :string}
+      assert Service2.__ema_action_echo() == %{action: :echo, input: :string, output: :string}
     end
   end
 

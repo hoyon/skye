@@ -39,7 +39,7 @@ defmodule Ema.Service do
     info_ast =
       quote do
         def unquote(fun_name)() do
-          %{action: unquote(act), input: unquote(input), response: unquote(output)}
+          %{action: unquote(act), input: unquote(input), output: unquote(output)}
         end
       end
 
