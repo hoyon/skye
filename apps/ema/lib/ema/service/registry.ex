@@ -1,8 +1,4 @@
 defmodule Ema.Service.Registry do
-  @moduledoc """
-  Module which keeps track of all services which Ema can use
-  """
-
   use GenServer
 
   ## API
@@ -43,23 +39,17 @@ defmodule Ema.Service.Registry do
 
   ## Private functions
 
-  # Get all modules which are services
-  # ie are of form Ema.Service.<something>
-  defp get_services(otp_app \\ :ema) do
-    {:ok, mods} = :application.get_key(otp_app, :modules)
-
-    mods
-    |> Enum.filter(fn mod ->
-      functions = mod.__info__(:functions)
-
-      Keyword.has_key?(functions, :__ema_service)
-    end)
-  end
-
   defp add_services(table) do
     get_services()
     |> Enum.each(fn service ->
+      Ema.Service.init(service)
       :ets.insert(table, {service, Ema.Service.actions(service), Ema.Service.metadata(service)})
     end)
+  end
+
+  defp get_services(otp_app \\ :ema) do
+    {:ok, mods} = :application.get_key(otp_app, :modules)
+
+    Enum.filter(mods, & Ema.Util.has_function?(&1, :__ema_service))
   end
 end

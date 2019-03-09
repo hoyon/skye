@@ -1,5 +1,6 @@
 defmodule Ema.Service do
   alias Ema.Service.Type
+  alias Ema.Util
 
   @action_prefix "__ema_action_"
   @type_prefix "__ema_type_"
@@ -145,5 +146,45 @@ defmodule Ema.Service do
       end
 
     %{name: name, description: description}
+  end
+
+  # Initialisation
+  @env_function :__ema_service_env
+
+  defmacro env(key, vars) when is_atom(key) and is_list(vars) do
+    check_ast =
+      quote do
+        def unquote(@env_function)() do
+          set = Application.get_env(:ema, unquote(key))
+
+          unquote(vars)
+          |> Enum.map(fn v -> Keyword.get(set, v, nil) != nil end)
+          |> Enum.all?(& &1)
+          |> case do
+            true -> :ok
+            false -> raise "Required environment variables for #{__MODULE__} not defined"
+          end
+        end
+      end
+
+    env_asts =
+      vars
+      |> Enum.map(fn var ->
+        fun_name = :"env_#{var}"
+
+        quote do
+          def unquote(fun_name)() do
+            Application.get_env(:ema, unquote(key))[unquote(var)]
+          end
+        end
+      end)
+
+    [check_ast | env_asts]
+  end
+
+  def init(service) when is_atom(service) do
+    if Util.has_function?(service, @env_function) do
+      apply(service, @env_function, [])
+    end
   end
 end

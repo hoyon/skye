@@ -1,22 +1,11 @@
 defmodule Gant.Telegram do
   use Ema.Service
+  alias Gant.Telegram.Api
 
   name "Telegram"
   description "Sends message via telegram"
 
-  defmodule Api do
-    use Tesla
-
-    @token Application.get_env(:ema, :telegram)[:token]
-    @chat_id Application.get_env(:ema, :telegram)[:chat_id]
-
-    plug(Tesla.Middleware.BaseUrl, "https://api.telegram.org/bot#{@token}")
-    plug(Tesla.Middleware.JSON)
-
-    def send_message(message) do
-      post("/sendMessage", %{"chat_id" => @chat_id, "text" => message})
-    end
-  end
+  env :telegram, [:token, :chat_id]
 
   type :send_response do
     description "Response from sending a message"
