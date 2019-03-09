@@ -20,7 +20,7 @@ defmodule Ema.ServiceCase do
 
   defmacro test_action_type(service, action, input) do
     quote do
-      test "#{unquote(service)}.#{unquote(action)} #{unquote(input)}" do
+      test "#{unquote(service)}.#{unquote(action)} gives correct type" do
         service = unquote(service)
         action = unquote(action)
         input = unquote(input)

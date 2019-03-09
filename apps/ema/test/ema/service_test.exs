@@ -26,13 +26,13 @@ defmodule Ema.ServiceTest do
     defmodule Service2 do
       use Ema.Service
 
-      action :echo, :string, :string do
+      action :echo, :string, :string, %{input: input} do
         {:ok, input}
       end
     end
 
-    test "creates action function which exposes input" do
-      assert Service2.action(:echo, "hello") == {:ok, "hello"}
+    test "creates action function which input parameters" do
+      assert Service2.action(:echo, %{input: "hello"}) == {:ok, "hello"}
     end
 
     test "creates function which contains type information" do

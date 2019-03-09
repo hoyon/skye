@@ -33,7 +33,7 @@ defmodule Ema.Service do
   end
 
   # Actions
-  defmacro action(act, input, output, do: body) do
+  defmacro action(act, input, output, params, do: body) do
     fun_name = :"#{@action_prefix}#{act}"
 
     info_ast =
@@ -43,13 +43,12 @@ defmodule Ema.Service do
         end
       end
 
-    # Not really sure why this works
-    input = Macro.escape({:input, [], nil})
+    params = Macro.escape(params)
     body = Macro.escape(body, unquote: true)
 
     act_ast =
-      quote bind_quoted: [fun_name: fun_name, act: act, input: input, body: body] do
-        def action(unquote(act), unquote(input)) do
+      quote bind_quoted: [fun_name: fun_name, act: act, params: params, body: body] do
+        def action(unquote(act), unquote(params)) do
           unquote(body)
         end
       end

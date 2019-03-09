@@ -41,5 +41,7 @@ defmodule Ema.Type do
   # Other helper functions
   def check_type(i, :string) when is_binary(i), do: true
   def check_type(i, :integer) when is_integer(i), do: true
-  def check_type(_, _), do: false
+  def check_type(_, :string), do: false
+  def check_type(_, :integer), do: false
+  def check_type(_, _), do: true # TODO proper type checking
 end
