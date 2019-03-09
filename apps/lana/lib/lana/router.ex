@@ -14,14 +14,9 @@ defmodule Lana.Router do
   end
 
   scope "/", Lana do
-    pipe_through :browser # Use the default browser stack
+    pipe_through :api
 
-    get "/", PageController, :index
-    post "/", PageController, :create
+    post "/send-message", PageController, :send_message
+    post "/echo", PageController, :echo
   end
-
-  # Other scopes may use custom stacks.
-  # scope "/api", Lana do
-  #   pipe_through :api
-  # end
 end
