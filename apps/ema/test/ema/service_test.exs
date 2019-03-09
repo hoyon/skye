@@ -1,15 +1,42 @@
 defmodule Ema.ServiceTest do
-  use Ema.ServiceCase, async: true, service: TestService
+  use ExUnit.Case, async: true
 
-  test_action_type(:echo, "hello")
+  describe "metadata" do
+    defmodule Service do
+      use Ema.Service
 
-  describe "Test service" do
-    test ":echo returns the input string" do
-      assert {:ok, "hello"} = Ema.Service.run(TestService, :echo, "hello")
+      name "a service"
+      description "a description"
     end
 
-    test ":echo only accepts a string" do
-      assert {:error, _} = Ema.Service.run(TestService, :echo, 1)
+    test "creates function marking it as a service" do
+      assert Service.__ema_service()
+    end
+
+    test "name macro generates function" do
+      assert Service.__ema_name() == "a service"
+    end
+
+    test "description macro generates function" do
+      assert Service.__ema_description() == "a description"
+    end
+  end
+
+  describe "actions" do
+    defmodule Service2 do
+      use Ema.Service
+
+      action :echo, :string, :string do
+        {:ok, input}
+      end
+    end
+
+    test "creates action function which exposes input" do
+      assert Service2.action(:echo, "hello") == {:ok, "hello"}
+    end
+
+    test "creates function which contains type information" do
+      assert Service2.__ema_action_echo() == %{action: :echo, input: :string, response: :string}
     end
   end
 end
