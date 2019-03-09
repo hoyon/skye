@@ -1,6 +1,6 @@
-defmodule Gant.Telegram do
+defmodule Ema.Service.Telegram do
   use Ema.Service
-  alias Gant.Telegram.Api
+  alias Ema.Service.Telegram.Api
 
   name "Telegram"
   description "Sends message via telegram"

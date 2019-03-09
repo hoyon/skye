@@ -1,4 +1,4 @@
-defmodule Ema.Service.Type do
+defmodule Ema.Type do
 
   # Type DSL
   def description(t, d) do

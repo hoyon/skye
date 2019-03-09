@@ -1,6 +1,6 @@
-defmodule Gant.Telegram.Api do
+defmodule Ema.Service.Telegram.Api do
   use Tesla
-  alias Gant.Telegram
+  alias Ema.Service.Telegram
 
   @token Telegram.env_token()
   @chat_id Telegram.env_chat_id()

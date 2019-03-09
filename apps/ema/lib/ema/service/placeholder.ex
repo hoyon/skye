@@ -1,4 +1,4 @@
-defmodule Gant.Placeholder do
+defmodule Ema.Service.Placeholder do
   use Ema.Service
 
   name "Json Placeholder"

@@ -1,7 +1,6 @@
 defmodule Ema.ServiceCase do
   use ExUnit.CaseTemplate
-  alias Ema.Service
-  alias Ema.Service.Type
+  alias Ema.{Service, Type}
 
   using opts do
     quote(bind_quoted: [opts: opts]) do

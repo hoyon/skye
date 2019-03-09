@@ -1,6 +1,5 @@
 defmodule Ema.Service do
-  alias Ema.Service.Type
-  alias Ema.Util
+  alias Ema.{Type, Util}
 
   @service_function :__ema_service
   @name_function :__ema_name

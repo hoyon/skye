@@ -1,4 +1,4 @@
-defmodule Ema.Service.Registry do
+defmodule Ema.Registry do
   use GenServer
 
   ## API
