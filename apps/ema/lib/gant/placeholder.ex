@@ -5,7 +5,6 @@ defmodule Gant.Placeholder do
   description "Get data from the JSON placeholder service"
 
   defmodule Api do
-    @moduledoc false
     use Tesla
 
     plug(Tesla.Middleware.BaseUrl, "https://jsonplaceholder.typicode.com")

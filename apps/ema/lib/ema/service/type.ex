@@ -1,7 +1,4 @@
 defmodule Ema.Service.Type do
-  @moduledoc """
-  Functions for type definition DSL and other helper functions
-  """
 
   # Type DSL
   def description(t, d) do
@@ -9,9 +6,6 @@ defmodule Ema.Service.Type do
   end
 
   defmodule Property do
-    @moduledoc """
-    A struct for properties of types
-    """
     defstruct name: nil, description: nil, type: nil
   end
 
