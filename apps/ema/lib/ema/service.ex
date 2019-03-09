@@ -4,9 +4,11 @@ defmodule Ema.Service do
   @service_function :__ema_service
   @name_function :__ema_name
   @description_function :__ema_description
-  @env_function :__ema_env
+  @env_function :__ema_env_check
+
   @action_prefix "__ema_action_"
   @type_prefix "__ema_type_"
+  @env_prefix "env_"
 
   defmacro __using__(_opts) do
     quote do
@@ -155,7 +157,7 @@ defmodule Ema.Service do
     check_ast =
       quote do
         def unquote(@env_function)() do
-          set = Application.get_env(:ema, unquote(key))
+          set = Application.get_env(:ema, unquote(key)) || []
 
           unquote(vars)
           |> Enum.map(fn v -> Keyword.get(set, v, nil) != nil end)
@@ -170,7 +172,7 @@ defmodule Ema.Service do
     env_asts =
       vars
       |> Enum.map(fn var ->
-        fun_name = :"env_#{var}"
+        fun_name = :"#{unquote(@env_prefix)}#{var}"
 
         quote do
           def unquote(fun_name)() do
