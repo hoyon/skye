@@ -2,6 +2,10 @@ defmodule Ema.Service do
   alias Ema.Service.Type
   alias Ema.Util
 
+  @service_function :__ema_service
+  @name_function :__ema_name
+  @description_function :__ema_description
+  @env_function :__ema_env
   @action_prefix "__ema_action_"
   @type_prefix "__ema_type_"
 
@@ -9,8 +13,12 @@ defmodule Ema.Service do
     quote do
       import Ema.Service
 
-      def __ema_service, do: true
+      def unquote(@service_function)(), do: true
     end
+  end
+
+  def is_service?(module) when is_atom(module) do
+    Util.has_function?(module, @service_function)
   end
 
   def run(service, action, input) do
@@ -106,16 +114,10 @@ defmodule Ema.Service do
   end
 
   # Metadata
-  defmodule Metadata do
-    @moduledoc """
-    Struct for service metadata
-    """
-    defstruct name: nil, description: nil
-  end
 
   defmacro name(n) do
     quote do
-      def __ema_service_name do
+      def unquote(@name_function)() do
         unquote(n)
       end
     end
@@ -123,7 +125,7 @@ defmodule Ema.Service do
 
   defmacro description(d) do
     quote do
-      def __ema_service_description do
+      def unquote(@description_function)() do
         unquote(d)
       end
     end
@@ -132,24 +134,23 @@ defmodule Ema.Service do
   @doc "Get the metadata for a service"
   def metadata(service) when is_atom(service) do
     name =
-      try do
-        service.__ema_service_name()
-      rescue
-        _ -> nil
+      if Util.has_function?(service, @name_function) do
+        apply(service, @name_function, [])
+      else
+        nil
       end
 
     description =
-      try do
-        service.__ema_service_description()
-      rescue
-        _ -> nil
+      if Util.has_function?(service, @description_function) do
+        apply(service, @description_function, [])
+      else
+        nil
       end
 
     %{name: name, description: description}
   end
 
   # Initialisation
-  @env_function :__ema_service_env
 
   defmacro env(key, vars) when is_atom(key) and is_list(vars) do
     check_ast =

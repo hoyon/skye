@@ -47,9 +47,9 @@ defmodule Ema.Service.Registry do
     end)
   end
 
-  defp get_services(otp_app \\ :ema) do
-    {:ok, mods} = :application.get_key(otp_app, :modules)
+  defp get_services do
+    {:ok, mods} = :application.get_key(:ema, :modules)
 
-    Enum.filter(mods, & Ema.Util.has_function?(&1, :__ema_service))
+    Enum.filter(mods, & Ema.Service.is_service?(&1))
   end
 end

@@ -11,7 +11,7 @@ defmodule Ema.ServiceCase do
       test_service_sanity @service
     end
   end
-  
+
   @doc "Ensure action returns correct type for a given input"
   defmacro test_action_type(action, input) do
     quote do
@@ -43,8 +43,8 @@ defmodule Ema.ServiceCase do
     quote do
 
       @required_functions [
-        :__ema_service_name,
-        :__ema_service_description
+        :__ema_name,
+        :__ema_description
       ]
 
       test "#{unquote(service)} sanity test" do
