@@ -28,7 +28,7 @@ defmodule Ema.Service do
     if Type.check_type(input, input_type) do
       service.action(action, input)
     else
-      {:error, "#{service}: Action #{action} expects #{input_type} but got #{input}"}
+      {:error, "#{service}: Action #{action} expects #{input_type} but got #{inspect(input)}"}
     end
   end
 
