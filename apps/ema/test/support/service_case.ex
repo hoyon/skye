@@ -8,7 +8,7 @@ defmodule Ema.ServiceCase do
       import Ema.ServiceCase
 
       @service Keyword.get(opts, :service)
-      test_service_sanity @service
+      test_service_sanity(@service)
     end
   end
 
@@ -41,22 +41,19 @@ defmodule Ema.ServiceCase do
   """
   defmacro test_service_sanity(service) do
     quote do
-
       @required_functions [
+        :__ema_service,
         :__ema_name,
         :__ema_description
       ]
 
       test "#{unquote(service)} sanity test" do
+        # Required functions
         functions = apply(unquote(service), :__info__, [:functions])
 
         assert @required_functions
-          |> Enum.map(fn f -> Keyword.has_key?(functions, f) end)
-          |> Enum.all?(& &1)
-
-        metadata = Service.metadata(unquote(service))
-        assert is_binary(metadata.name)
-        assert is_binary(metadata.description)
+               |> Enum.map(fn f -> Keyword.has_key?(functions, f) end)
+               |> Enum.all?(& &1)
       end
     end
   end

@@ -1,4 +1,4 @@
-defmodule Ema.Service.Test do
+defmodule TestService do
   use Ema.Service
 
   name "test service"

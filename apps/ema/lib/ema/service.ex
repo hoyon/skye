@@ -115,7 +115,7 @@ defmodule Ema.Service do
 
   # Metadata
 
-  defmacro name(n) do
+  defmacro name(n) when is_binary(n) do
     quote do
       def unquote(@name_function)() do
         unquote(n)
@@ -123,7 +123,7 @@ defmodule Ema.Service do
     end
   end
 
-  defmacro description(d) do
+  defmacro description(d) when is_binary(d) do
     quote do
       def unquote(@description_function)() do
         unquote(d)
