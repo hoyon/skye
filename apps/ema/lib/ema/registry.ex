@@ -19,7 +19,11 @@ defmodule Ema.Registry do
     get_services()
   end
 
-  ## Callback
+  def get_service(service) do
+    GenServer.call(__MODULE__, {:get_service, service})
+  end
+
+  ## Callbacks
 
   def init(_) do
     table = :ets.new(:service_registry, [:set, :protected])
@@ -29,6 +33,13 @@ defmodule Ema.Registry do
 
   def handle_call(:status, _from, %{table: table} = state) do
     {:reply, :ets.tab2list(table), state}
+  end
+
+  def handle_call({:get_service, service}, _from, %{table: table} = state) do
+    case :ets.lookup(table, service) do
+      [service] -> {:reply, {:ok, service}, state}
+      _ -> {:reply, {:error, "Could not find service #{service}"}, state}
+    end
   end
 
   def handle_cast(:reload, %{table: table} = state) do
@@ -43,7 +54,7 @@ defmodule Ema.Registry do
     get_services()
     |> Enum.each(fn service ->
       Ema.Service.init(service)
-      :ets.insert(table, {service, Ema.Service.actions(service), Ema.Service.metadata(service)})
+      :ets.insert(table, {service, make_value(service)})
     end)
   end
 
@@ -51,5 +62,12 @@ defmodule Ema.Registry do
     {:ok, mods} = :application.get_key(:ema, :modules)
 
     Enum.filter(mods, & Ema.Service.is_service?(&1))
+  end
+
+  defp make_value(service) do
+    %{metadata: Ema.Service.metadata(service),
+      types: Ema.Service.types(service),
+      actions: Ema.Service.actions(service)
+    }
   end
 end
