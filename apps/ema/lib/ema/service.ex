@@ -24,12 +24,12 @@ defmodule Ema.Service do
   end
 
   def run(service, action, input) do
-    %{input: input_type} = actions(service)[action]
+    %{input: input_typename} = actions(service)[action]
 
-    if Type.check_type(input, input_type) do
+    if Type.check_type(input, service, input_typename) do
       service.action(action, input)
     else
-      {:error, "#{service}: Action #{action} expects #{input_type} but got #{inspect(input)}"}
+      {:error, "#{service}: Action #{action} expects #{input_typename} but got #{inspect(input)}"}
     end
   end
 

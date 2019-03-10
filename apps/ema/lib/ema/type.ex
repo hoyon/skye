@@ -52,11 +52,21 @@ defmodule Ema.Type do
     end
   end
 
-  # Other helper functions
-  def check_type(i, :string) when is_binary(i), do: true
-  def check_type(i, :integer) when is_integer(i), do: true
-  def check_type(_, :string), do: false
-  def check_type(_, :integer), do: false
-  # TODO proper type checking
-  def check_type(_, _), do: true
+  # Type checking
+  def check_type(value, service, typename) do
+    type = apply(service, :"#{@type_prefix}#{typename}", [])
+    check_type(value, type)
+  end
+
+  def check_type(value, %Ema.Type{} = type) do
+    type.properties
+    |> Enum.map(fn {_key, prop} -> check_primative_type(Map.get(value, prop.name), prop.type) end)
+    |> Enum.all?(& &1)
+  end
+
+  def check_primative_type(v, :string) when is_binary(v), do: true
+  def check_primative_type(v, :integer) when is_integer(v), do: true
+  def check_primative_type(_, :string), do: false
+  def check_primative_type(_, :integer), do: false
+  def check_primative_type(_, _), do: false
 end

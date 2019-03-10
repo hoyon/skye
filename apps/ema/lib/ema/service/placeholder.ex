@@ -23,7 +23,7 @@ defmodule Ema.Service.Placeholder do
   end
 
   type :get_post_params do
-    post_id :string, "the post id"
+    post_id :integer, "the post id"
   end
 
   action :get_post, :get_post_params, :post, %{post_id: post_id} do

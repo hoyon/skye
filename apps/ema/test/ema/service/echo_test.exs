@@ -8,5 +8,4 @@ defmodule Ema.Service.EchoTest do
       assert {:ok, %{text: "hello"}} = Ema.Service.run(Ema.Service.Echo, :echo, %{text: "hello"})
     end
   end
-
 end

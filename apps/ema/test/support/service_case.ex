@@ -25,9 +25,9 @@ defmodule Ema.ServiceCase do
         action = unquote(action)
         input = unquote(input)
 
-        output_type = Service.actions(service)[action].output
+        output_typename = Service.actions(service)[action].output
         {:ok, result} = Service.run(service, action, input)
-        assert Type.check_type(result, output_type)
+        assert Type.check_type(result, service, output_typename)
       end
     end
   end
