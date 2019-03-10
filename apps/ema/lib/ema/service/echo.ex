@@ -5,10 +5,7 @@ defmodule Ema.Service.Echo do
   description "Returns the input string unchanged"
 
   type :message do
-    description "A message"
-    properties do
-      text :string, "The string to echo"
-    end
+    text :string, "The string to echo"
   end
 
   action :echo, :message, :message, %{text: text} do

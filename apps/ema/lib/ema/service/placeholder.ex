@@ -15,20 +15,15 @@ defmodule Ema.Service.Placeholder do
     end
   end
 
-  type :post do
-    description "A post"
-    properties do
-      user_id :string, "The user id"
-      id :integer, "The post id"
-      title :string, "The title of the post"
-      body :string, "The body of the post"
-    end
+  type :post, "A post" do
+    user_id :string, "The user id"
+    id :integer, "The post id"
+    title :string, "The title of the post"
+    body :string, "The body of the post"
   end
 
   type :get_post_params do
-    properties do
-      post_id :string, "the post id"
-    end
+    post_id :string, "the post id"
   end
 
   action :get_post, :get_post_params, :post, %{post_id: post_id} do

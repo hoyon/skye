@@ -13,6 +13,7 @@ defmodule Ema.Service do
   defmacro __using__(_opts) do
     quote do
       import Ema.Service
+      import Ema.Type, only: [type: 2, type: 3]
 
       def unquote(@service_function)(), do: true
     end
@@ -69,36 +70,6 @@ defmodule Ema.Service do
   end
 
   # Types
-
-  @doc "Macro for defining types using DSL"
-  defmacro type(name, block) when is_atom(name) do
-    exprs =
-      case block do
-        [do: {:__block__, _, exprs}] -> exprs
-        [do: expr] -> [expr]
-      end
-
-    acc =
-      quote do
-        %Type{name: unquote(name)}
-      end
-
-    body =
-      Enum.reduce(exprs, acc, fn expr, acc ->
-        quote do
-          unquote(acc) |> unquote(expr)
-        end
-      end)
-
-    fun_name = :"#{@type_prefix}#{name}"
-
-    quote do
-      def unquote(fun_name)() do
-        import Type
-        unquote(body)
-      end
-    end
-  end
 
   @doc "Get all types definined in a service"
   def types(service) when is_atom(service) do
