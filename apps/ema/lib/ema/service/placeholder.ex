@@ -13,6 +13,10 @@ defmodule Ema.Service.Placeholder do
     def get_post(id) do
       get("/posts/#{id}")
     end
+
+    def get_user(id) do
+      get("/users/#{id}")
+    end
   end
 
   type :post, "A post" do
@@ -22,12 +26,26 @@ defmodule Ema.Service.Placeholder do
     body :string, "The body of the post"
   end
 
+  type :user do
+    name :string
+    username :string
+  end
+
   type :get_post_params do
-    post_id :integer, "the post id"
+    post_id :integer
+  end
+
+  type :get_user_params do
+    user_id :integer
   end
 
   action :get_post, :get_post_params, :post, %{post_id: post_id} do
     {:ok, res} = Api.get_post(post_id)
     {:ok, res.body}
+  end
+
+  action :get_user, :get_user_params, :user, %{user_id: user_id} do
+    {:ok, res} = Api.get_user(user_id)
+    {:ok, %{name: res.body["name"], username: res.body["username"]}}
   end
 end
