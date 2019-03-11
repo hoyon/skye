@@ -1,8 +1,8 @@
-defmodule Ema.Service.Echo do
+defmodule Ema.Service.Dummy do
   use Ema.Service
 
-  name "Echo service"
-  description "Returns the input string unchanged"
+  name "Dummy service"
+  description "A dummy service for testing purposes"
 
   type :message do
     text :string, "The string to echo"

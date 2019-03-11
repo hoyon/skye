@@ -4,7 +4,7 @@ defmodule Ema.Recipe do
     {:ok, result} = Ema.run_sync(Ema.Service.Placeholder, :get_post, %{post_id: 2})
 
     input = make_input(%{steps: [result]})
-    Ema.run_sync(Ema.Service.Echo, :echo, input)
+    Ema.run_sync(Ema.Service.Dummy, :echo, input)
   end
 
   def make_input(env) do
