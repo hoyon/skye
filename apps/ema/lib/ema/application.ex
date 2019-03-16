@@ -4,7 +4,7 @@ defmodule Ema.Application do
   def start(_type, _args) do
     children = [
       Ema.Server,
-      Ema.Registry,
+      Ema.Registry
     ]
 
     Honeydew.start_queue(:ema)

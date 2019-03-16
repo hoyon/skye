@@ -6,13 +6,15 @@ defmodule Ema.Service.DummyTest do
 
   describe "echo" do
     test "returns the input string" do
-      assert {:ok, %{"text" => "hello"}} = Ema.Service.run(Ema.Service.Dummy, :echo, %{"text" => "hello"})
+      assert {:ok, %{"text" => "hello"}} =
+               Ema.Service.run(Ema.Service.Dummy, :echo, %{"text" => "hello"})
     end
   end
 
   describe "greet" do
     test "returns greeting" do
-      assert {:ok, %{"text" => "Hello bob!"}} = Ema.Service.run(Ema.Service.Dummy, :greet, %{"name" => "bob"})
+      assert {:ok, %{"text" => "Hello bob!"}} =
+               Ema.Service.run(Ema.Service.Dummy, :greet, %{"name" => "bob"})
     end
   end
 end

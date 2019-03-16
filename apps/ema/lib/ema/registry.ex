@@ -61,11 +61,12 @@ defmodule Ema.Registry do
   defp get_services do
     {:ok, mods} = :application.get_key(:ema, :modules)
 
-    Enum.filter(mods, & Ema.Service.is_service?(&1))
+    Enum.filter(mods, &Ema.Service.is_service?(&1))
   end
 
   defp make_value(service) do
-    %{metadata: Ema.Service.metadata(service),
+    %{
+      metadata: Ema.Service.metadata(service),
       types: Ema.Service.types(service),
       actions: Ema.Service.actions(service)
     }

@@ -19,7 +19,10 @@ defmodule Ema.TypeTest do
 
   describe "check_type/2" do
     test "returns true for correct type" do
-      assert check_type(%{"title" => "some clickbait", "author" => "bob"}, Service.__ema_type_post())
+      assert check_type(
+               %{"title" => "some clickbait", "author" => "bob"},
+               Service.__ema_type_post()
+             )
     end
 
     test "returns false with missing fields" do
@@ -30,5 +33,4 @@ defmodule Ema.TypeTest do
       refute check_type(%{"title" => "some clickbait", "author" => 4}, Service.__ema_type_post())
     end
   end
-
 end

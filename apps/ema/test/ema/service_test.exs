@@ -48,19 +48,20 @@ defmodule Ema.ServiceTest do
     end
 
     test "defines env check function" do
-      Application.put_env(:ema, :service3, [name: "bob"])
+      Application.put_env(:ema, :service3, name: "bob")
       assert :ok == Service3.__ema_env_check()
     end
 
     test "without env defined check function raises" do
       Application.put_env(:ema, :service3, nil)
+
       assert_raise RuntimeError, fn ->
         Service3.__ema_env_check()
       end
     end
 
     test "defines function to get env variable" do
-      Application.put_env(:ema, :service3, [name: "bob"])
+      Application.put_env(:ema, :service3, name: "bob")
       assert Service3.env_name() == "bob"
     end
   end

@@ -63,9 +63,11 @@ defmodule Ema.Template do
   defp symbol_reducer(token, {ast, str}) when is_integer(token) do
     {ast, str ++ [token]}
   end
+
   defp symbol_reducer(token, {ast, []}) when is_binary(token) do
     {ast ++ [{:expr, String.trim(token)}], []}
   end
+
   defp symbol_reducer(token, {ast, str}) when is_binary(token) do
     {ast ++ [{:str, to_string(str)}, {:expr, String.trim(token)}], []}
   end
