@@ -11,6 +11,7 @@
         {Credo.Check.Readability.MaxLineLength, priority: :low, max_length: 100},
         {Credo.Check.Readability.ModuleDoc, false},
         {Credo.Check.Design.AliasUsage, false},
+        {Credo.Check.Refactor.PipeChainStart, false}
       ]
     }
   ]
