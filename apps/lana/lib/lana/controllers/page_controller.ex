@@ -7,7 +7,7 @@ defmodule Lana.PageController do
   end
 
   def echo(conn, %{"message" => message}) do
-    {:ok, res} = Ema.run_sync(Ema.Service.Dummy, :echo, %{"message" => message})
+    {:ok, res} = Ema.run_sync(Ema.Service.Dummy, :echo, %{"text" => message})
     json(conn, res)
   end
 end
