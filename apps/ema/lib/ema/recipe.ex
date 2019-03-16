@@ -1,7 +1,7 @@
 defmodule Ema.Recipe do
   def recipe do
     %{
-      input: %{user_id: 3},
+      input: %{"user_id" => 3},
       steps: [
         {Ema.Service.Placeholder, :get_user, &input/1},
         {Ema.Service.Dummy, :greet, &transform1/1},
@@ -23,13 +23,13 @@ defmodule Ema.Recipe do
   end
 
   def transform1(recipe) do
-    username = Enum.at(recipe.results, 0).username
-    %{name: username}
+    username = Enum.at(recipe.results, 0)["username"]
+    %{"name" => username}
   end
 
   def transform2(recipe) do
-    message = Enum.at(recipe.results, 1).text
-    %{text: message}
+    message = Enum.at(recipe.results, 1)["text"]
+    %{"text" => message}
   end
 
   def input(recipe) do

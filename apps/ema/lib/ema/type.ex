@@ -40,8 +40,9 @@ defmodule Ema.Type do
     end
   end
 
-  def property(t, name, type, description \\ "")
-      when is_atom(type) and is_binary(description) do
+  def property(t, name, type, description \\ "") when is_atom(type) and is_binary(description) do
+    name = Atom.to_string(name)
+
     if Map.has_key?(t.properties, name) do
       raise "#{t.service}: Type '#{t.name}' has multiple definitions for field '#{name}'"
     else

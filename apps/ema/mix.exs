@@ -33,7 +33,8 @@ defmodule Ema.MixProject do
     [
       {:honeydew, "~> 1.3"},
       {:tesla, "~> 1.0"},
-      {:jason, "~> 1.0"}
+      {:jason, "~> 1.0"},
+      {:nimble_parsec, "~> 0.2"}
     ]
   end
 end

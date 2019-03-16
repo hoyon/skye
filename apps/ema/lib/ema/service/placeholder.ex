@@ -39,13 +39,13 @@ defmodule Ema.Service.Placeholder do
     user_id :integer
   end
 
-  action :get_post, :get_post_params, :post, %{post_id: post_id} do
+  action :get_post, :get_post_params, :post, %{"post_id" => post_id} do
     {:ok, res} = Api.get_post(post_id)
     {:ok, res.body}
   end
 
-  action :get_user, :get_user_params, :user, %{user_id: user_id} do
+  action :get_user, :get_user_params, :user, %{"user_id" => user_id} do
     {:ok, res} = Api.get_user(user_id)
-    {:ok, %{name: res.body["name"], username: res.body["username"]}}
+    {:ok, %{"name" => res.body["name"], "username" => res.body["username"]}}
   end
 end

@@ -12,11 +12,11 @@ defmodule Ema.Service.Dummy do
     name :string
   end
 
-  action :echo, :message, :message, %{text: text} do
-    {:ok, %{text: text}}
+  action :echo, :message, :message, %{"text" => text} do
+    {:ok, %{"text" => text}}
   end
 
-  action :greet, :name, :message, %{name: name} do
-    {:ok, %{text: "Hello #{name}!"}}
+  action :greet, :name, :message, %{"name" => name} do
+    {:ok, %{"text" => "Hello #{name}!"}}
   end
 end

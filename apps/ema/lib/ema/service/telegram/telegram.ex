@@ -15,7 +15,7 @@ defmodule Ema.Service.Telegram do
     text :string, "The message"
   end
 
-  action :send_message, :message, :send_response, %{text: text} do
+  action :send_message, :message, :send_response, %{"text" => text} do
     {:ok, res} = Api.send_message(text)
     {:ok, res.body}
   end
