@@ -3,11 +3,12 @@ defmodule Ema.Service.Placeholder do
 
   name "Json Placeholder"
   description "Get data from the JSON placeholder service"
+  env :placeholder, [:base_url]
 
   defmodule Api do
     use Tesla
 
-    plug(Tesla.Middleware.BaseUrl, "https://jsonplaceholder.typicode.com")
+    plug(Tesla.Middleware.BaseUrl, Ema.Service.Placeholder.env_base_url())
     plug(Tesla.Middleware.JSON)
 
     def get_post(id) do
@@ -20,7 +21,7 @@ defmodule Ema.Service.Placeholder do
   end
 
   type :post, "A post" do
-    user_id :string, "The user id"
+    user_id :integer, "The user id"
     id :integer, "The post id"
     title :string, "The title of the post"
     body :string, "The body of the post"
@@ -41,11 +42,21 @@ defmodule Ema.Service.Placeholder do
 
   action :get_post, :get_post_params, :post, %{"post_id" => post_id} do
     {:ok, res} = Api.get_post(post_id)
-    {:ok, res.body}
+    body = res.body
+
+    {:ok,
+     %{
+       "user_id" => body["userId"],
+       "id" => body["id"],
+       "title" => body["title"],
+       "body" => body["body"]
+     }}
   end
 
   action :get_user, :get_user_params, :user, %{"user_id" => user_id} do
     {:ok, res} = Api.get_user(user_id)
-    {:ok, %{"name" => res.body["name"], "username" => res.body["username"]}}
+    body = res.body
+
+    {:ok, %{"name" => body["name"], "username" => body["username"]}}
   end
 end
