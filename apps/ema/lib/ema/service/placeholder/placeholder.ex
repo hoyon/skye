@@ -1,7 +1,7 @@
 defmodule Ema.Service.Placeholder do
   use Ema.Service
 
-  alias Ema.Service.Placeholder.Api
+  @api Application.get_env(:ema, :placeholder)[:adapter] || Ema.Service.Placeholder.Http
 
   name "Json Placeholder"
   description "Get data from the JSON placeholder service"
@@ -28,22 +28,10 @@ defmodule Ema.Service.Placeholder do
   end
 
   action :get_post, :get_post_params, :post, %{"post_id" => post_id} do
-    {:ok, res} = Api.get_post(post_id)
-    body = res.body
-
-    {:ok,
-     %{
-       "user_id" => body["userId"],
-       "id" => body["id"],
-       "title" => body["title"],
-       "body" => body["body"]
-     }}
+    @api.get_post(post_id)
   end
 
   action :get_user, :get_user_params, :user, %{"user_id" => user_id} do
-    {:ok, res} = Api.get_user(user_id)
-    body = res.body
-
-    {:ok, %{"name" => body["name"], "username" => body["username"]}}
+    @api.get_user(user_id)
   end
 end

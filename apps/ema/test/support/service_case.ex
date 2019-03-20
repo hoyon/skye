@@ -5,6 +5,7 @@ defmodule Ema.ServiceCase do
   using opts do
     quote(bind_quoted: [opts: opts]) do
       import Ema.ServiceCase
+      import Mox
 
       @service Keyword.get(opts, :service)
       test_service_sanity(@service)
@@ -18,11 +19,12 @@ defmodule Ema.ServiceCase do
         service = @service
         action = unquote(action)
         input = unquote(input)
+        output = unquote(output)
 
         output_typename = Service.actions(service)[action].output
         {:ok, result} = Service.run(service, action, input)
         assert Type.check_type(result, service, output_typename)
-        assert result == unquote(output)
+        assert result == output
       end
     end
   end

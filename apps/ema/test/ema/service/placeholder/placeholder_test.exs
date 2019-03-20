@@ -1,26 +1,13 @@
 defmodule Ema.Service.PlaceholderTest do
   use Ema.ServiceCase, async: true, service: Ema.Service.Placeholder
 
-  import Tesla.Mock
-  import Mox
-
-  @base_url Ema.Service.Placeholder.env_base_url()
-
-  setup :verify_on_exit!
-
-  setup_all do
-    Mox.defmock(Ema.Service.Placeholder.Api.Mock, for: Tesla.Adapter)
-    :ok
-  end
-
   setup do
-    Ema.Service.Placeholder.Api.Mock
-    |> stub(:call, fn
-      %{url: "#{@base_url}/posts/1"}, _opts ->
-        {:ok, json(%{"userId" => 1, "id" => 1, "title" => "a post", "body" => "some text"})}
-
-      %{url: "#{@base_url}/users/1"}, _opts ->
-        {:ok, json(%{"id" => 1, "name" => "Bob", "username" => "bobby3"})}
+    Ema.Service.Placeholder.MockApi
+    |> stub(:get_post, fn _ ->
+      {:ok, %{"user_id" => 1, "id" => 1, "title" => "a post", "body" => "some text"} }
+    end)
+    |> stub(:get_user, fn _ ->
+      {:ok, %{"name" => "Bob", "username" => "bobby3"}}
     end)
 
     :ok
