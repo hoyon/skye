@@ -4,4 +4,4 @@ config :ema, :telegram,
   token: "",
   chat_id: ""
 
-config :tesla, adapter: Tesla.Mock
+config :tesla, Ema.Service.Placeholder.Api, adapter: Ema.Service.Placeholder.Api.Mock

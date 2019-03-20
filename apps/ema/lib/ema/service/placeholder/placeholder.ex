@@ -1,24 +1,11 @@
 defmodule Ema.Service.Placeholder do
   use Ema.Service
 
+  alias Ema.Service.Placeholder.Api
+
   name "Json Placeholder"
   description "Get data from the JSON placeholder service"
   env :placeholder, [:base_url]
-
-  defmodule Api do
-    use Tesla
-
-    plug(Tesla.Middleware.BaseUrl, Ema.Service.Placeholder.env_base_url())
-    plug(Tesla.Middleware.JSON)
-
-    def get_post(id) do
-      get("/posts/#{id}")
-    end
-
-    def get_user(id) do
-      get("/users/#{id}")
-    end
-  end
 
   type :post, "A post" do
     user_id :integer, "The user id"
