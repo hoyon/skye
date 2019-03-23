@@ -43,7 +43,9 @@ defmodule Lana.Mixfile do
       {:gettext, "~> 0.11"},
       {:plug_cowboy, "~> 2.0"},
       {:plug, "~> 1.7"},
-      {:jason, "~> 1.0"}
+      {:jason, "~> 1.1"},
+      {:absinthe, "~> 1.4.0"},
+      {:absinthe_plug, "~> 1.4.0"}
     ]
   end
 end

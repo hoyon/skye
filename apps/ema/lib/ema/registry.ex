@@ -23,6 +23,10 @@ defmodule Ema.Registry do
     GenServer.call(__MODULE__, {:get_service, service})
   end
 
+  def list_services do
+    GenServer.call(__MODULE__, :list_services)
+  end
+
   ## Callbacks
 
   def init(_) do
@@ -40,6 +44,14 @@ defmodule Ema.Registry do
       [service] -> {:reply, {:ok, service}, state}
       _ -> {:reply, {:error, "Could not find service #{service}"}, state}
     end
+  end
+
+  def handle_call(:list_services, _from, %{table: table} = state) do
+    names =
+      :ets.tab2list(table)
+      |> Enum.map(fn s -> elem(s, 1).metadata end)
+
+    {:reply, names, state}
   end
 
   def handle_cast(:reload, %{table: table} = state) do

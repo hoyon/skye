@@ -13,6 +13,15 @@ defmodule Lana.Router do
     plug :accepts, ["json"]
   end
 
+  forward "/api", Absinthe.Plug,
+    schema: Lana.Schema,
+    json_codec: Jason
+
+  forward "/graphiql", Absinthe.Plug.GraphiQL,
+    schema: Lana.Schema,
+    json_codec: Jason,
+    interface: :playground
+
   scope "/", Lana do
     pipe_through :api
 
