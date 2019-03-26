@@ -1,0 +1,7 @@
+/node_modules
+/lib/bs
+.merlin
+.bsb.lock
+.tern-port
+build
+*.bs.js
