@@ -1,4 +1,7 @@
-type state = {text: string, message: string};
+type state = {
+  text: string,
+  message: string,
+};
 
 type action =
   | Click
@@ -25,8 +28,14 @@ let make = _children => {
               "http://localhost:4000/send-message",
               Fetch.RequestInit.make(
                 ~method_=Post,
-                ~body=Fetch.BodyInit.make(Js.Json.stringify(Js.Json.object_(payload))),
-                ~headers=Fetch.HeadersInit.make({"Content-Type": "application/json"}),
+                ~body=
+                  Fetch.BodyInit.make(
+                    Js.Json.stringify(Js.Json.object_(payload)),
+                  ),
+                ~headers=
+                  Fetch.HeadersInit.make({
+                    "Content-Type": "application/json",
+                  }),
                 (),
               ),
             )
@@ -36,7 +45,7 @@ let make = _children => {
                )
             |> ignore
           ),
-      )
+      );
     | GotResponse(t) => ReasonReact.Update({...state, text: t})
     | InputText(t) => ReasonReact.Update({...state, message: t})
     },
@@ -46,8 +55,11 @@ let make = _children => {
       <button onClick={_event => self.send(Click)}>
         {ReasonReact.string("Send message")}
       </button>
-      <input onInput={event => self.send(InputText(event->ReactEvent.Form.target##value))}>
-      </input>
+      <input
+        onInput={event =>
+          self.send(InputText(event->ReactEvent.Form.target##value))
+        }
+      />
       {ReasonReact.string(self.state.text)}
     </div>;
   },
