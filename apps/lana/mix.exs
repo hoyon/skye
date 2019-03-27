@@ -45,7 +45,8 @@ defmodule Lana.Mixfile do
       {:plug, "~> 1.7"},
       {:jason, "~> 1.1"},
       {:absinthe, "~> 1.4.0"},
-      {:absinthe_plug, "~> 1.4.0"}
+      {:absinthe_plug, "~> 1.4.0"},
+      {:cors_plug, "~> 2.0"}
     ]
   end
 end

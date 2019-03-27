@@ -39,6 +39,8 @@ defmodule Lana.Endpoint do
     key: "_lana_key",
     signing_salt: "UU8oiZJL"
 
+  plug CORSPlug
+
   plug Lana.Router
 
   @doc """
