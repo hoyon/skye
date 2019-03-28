@@ -30,7 +30,7 @@ let make = _children => {
     let query = "query{services{name}}";
     Js.Promise.(
       Fetch.fetchWithInit(
-      "http://localhost:4000/api",
+      "/api",
       Fetch.RequestInit.make(
         ~method_=Post,
         ~body=Fetch.BodyInit.make(query),
