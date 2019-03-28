@@ -5,7 +5,14 @@ defmodule Ema.Service.Telegram.Api do
   plug(Tesla.Middleware.BaseUrl, "https://api.telegram.org/bot#{Telegram.env_token()}")
   plug(Tesla.Middleware.JSON)
 
+  @callback send_message(string()) :: term()
   def send_message(message) do
-    post("/sendMessage", %{"chat_id" => Telegram.env_chat_id(), "text" => message})
+    {:ok, response} = post("/sendMessage", %{"chat_id" => Telegram.env_chat_id(), "text" => message})
+
+    if response["ok"] do
+      {:ok, %{"sent_message" => response.body["result"]["text"]}}
+    else
+      {:error, "Failed to send message"}
+    end
   end
 end

@@ -1,6 +1,7 @@
 defmodule Ema.Service.Telegram do
   use Ema.Service
-  alias Ema.Service.Telegram.Api
+
+  @api Application.get_env(:ema, :telegram_api, Ema.Service.Telegram.Api)
 
   name "Telegram"
   description "Sends message via telegram"
@@ -16,11 +17,6 @@ defmodule Ema.Service.Telegram do
   end
 
   action :send_message, :message, :send_response, %{"text" => text} do
-    {:ok, res} = Api.send_message(text)
-    if res.body["ok"] do
-      {:ok, %{"sent_message" => res.body["result"]["text"]}}
-    else
-      {:error, "Failed to send message"}
-    end
+     @api.send_message(text)
   end
 end

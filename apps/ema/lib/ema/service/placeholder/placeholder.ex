@@ -1,7 +1,7 @@
 defmodule Ema.Service.Placeholder do
   use Ema.Service
 
-  @api Application.get_env(:ema, :placeholder)[:adapter] || Ema.Service.Placeholder.Http
+  @api Application.get_env(:ema, :placeholder_api, Ema.Service.Placeholder.Api)
 
   name "Json Placeholder"
   description "Get data from the JSON placeholder service"
