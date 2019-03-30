@@ -4,7 +4,7 @@ defmodule Ema.Service.PlaceholderTest do
   setup do
     Ema.Service.Placeholder.MockApi
     |> stub(:get_post, fn _ ->
-      {:ok, %{"user_id" => 1, "id" => 1, "title" => "a post", "body" => "some text"} }
+      {:ok, %{"user_id" => "1", "id" => "1", "title" => "a post", "body" => "some text"} }
     end)
     |> stub(:get_user, fn _ ->
       {:ok, %{"name" => "Bob", "username" => "bobby3"}}
@@ -15,13 +15,13 @@ defmodule Ema.Service.PlaceholderTest do
 
   test_action(
     :get_user,
-    %{"user_id" => 1},
+    %{"user_id" => "1"},
     %{"name" => "Bob", "username" => "bobby3"}
   )
 
   test_action(
     :get_post,
-    %{"post_id" => 1},
-    %{"user_id" => 1, "id" => 1, "title" => "a post", "body" => "some text"}
+    %{"post_id" => "1"},
+    %{"user_id" => "1", "id" => "1", "title" => "a post", "body" => "some text"}
   )
 end

@@ -4,7 +4,7 @@ defmodule Ema.Service.Placeholder.Api do
   plug(Tesla.Middleware.BaseUrl, Ema.Service.Placeholder.env_base_url())
   plug(Tesla.Middleware.JSON)
 
-  @callback get_post(number) :: term()
+  @callback get_post(binary) :: term()
   def get_post(id) do
     {:ok, res} = get("/posts/#{id}")
 
@@ -12,14 +12,14 @@ defmodule Ema.Service.Placeholder.Api do
 
     {:ok,
      %{
-       "user_id" => body["userId"],
-       "id" => body["id"],
+       "user_id" => body["userId"] |> to_string(),
+       "id" => body["id"] |> to_string(),
        "title" => body["title"],
        "body" => body["body"]
      }}
   end
 
-  @callback get_user(number) :: term()
+  @callback get_user(binary) :: term()
   def get_user(id) do
     {:ok, res} = get("/users/#{id}")
 
