@@ -66,8 +66,14 @@ defmodule Ema.Type do
   end
 
   def check_primative_type(v, :string) when is_binary(v), do: true
-  def check_primative_type(v, :integer) when is_integer(v), do: true
-  def check_primative_type(_, :string), do: false
-  def check_primative_type(_, :integer), do: false
+  def check_primative_type(v, :integer), do: try_cast_int(v)
   def check_primative_type(_, _), do: false
+
+  defp try_cast_int(nil), do: false
+  defp try_cast_int(value) do
+    case Integer.parse(value) do
+      {_, ""} -> true
+      _ -> false
+    end
+  end
 end

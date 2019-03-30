@@ -7,20 +7,20 @@ defmodule Ema.TypeTest do
 
     type :post do
       title :string
-      author :string
+      id :integer
     end
   end
 
   describe "check_type/3" do
     test "checks type given a service and typename" do
-      assert check_type(%{"title" => "some clickbait", "author" => "bob"}, Service, :post)
+      assert check_type(%{"title" => "some clickbait", "id" => "4"}, Service, :post)
     end
   end
 
   describe "check_type/2" do
     test "returns true for correct type" do
       assert check_type(
-               %{"title" => "some clickbait", "author" => "bob"},
+               %{"title" => "some clickbait", "id" => "3"},
                Service.__ema_type_post()
              )
     end
@@ -30,7 +30,11 @@ defmodule Ema.TypeTest do
     end
 
     test "returns false with incorrect field type" do
-      refute check_type(%{"title" => "some clickbait", "author" => 4}, Service.__ema_type_post())
+      refute check_type(%{"title" => "some clickbait"}, Service.__ema_type_post())
+    end
+
+    test "returns false with non integer string" do
+      refute check_type(%{"title" => "t", "id" => "non a string"}, Service.__ema_type_post())
     end
   end
 end

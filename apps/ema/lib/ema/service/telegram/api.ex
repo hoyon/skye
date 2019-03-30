@@ -9,8 +9,7 @@ defmodule Ema.Service.Telegram.Api do
   def send_message(message) do
     {:ok, response} = post("/sendMessage",
       %{"chat_id" => Telegram.env_chat_id(),
-        "text" => message,
-        "parse_mode" => "Html"})
+        "text" => message})
 
     if response.body["ok"] do
       {:ok, %{"sent_message" => response.body["result"]["text"]}}
