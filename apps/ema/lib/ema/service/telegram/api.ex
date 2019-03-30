@@ -7,9 +7,12 @@ defmodule Ema.Service.Telegram.Api do
 
   @callback send_message(binary()) :: term()
   def send_message(message) do
-    {:ok, response} = post("/sendMessage", %{"chat_id" => Telegram.env_chat_id(), "text" => message})
+    {:ok, response} = post("/sendMessage",
+      %{"chat_id" => Telegram.env_chat_id(),
+        "text" => message,
+        "parse_mode" => "Html"})
 
-    if response["ok"] do
+    if response.body["ok"] do
       {:ok, %{"sent_message" => response.body["result"]["text"]}}
     else
       {:error, "Failed to send message"}

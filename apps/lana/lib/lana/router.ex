@@ -27,5 +27,6 @@ defmodule Lana.Router do
 
     post "/send-message", PageController, :send_message
     post "/echo", PageController, :echo
+    post "/telegram", PageController, :telegram
   end
 end
