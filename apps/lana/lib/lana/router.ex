@@ -24,9 +24,6 @@ defmodule Lana.Router do
 
   scope "/", Lana do
     pipe_through :api
-
-    post "/send-message", PageController, :send_message
-    post "/echo", PageController, :echo
-    post "/telegram", PageController, :telegram
+    post "/telegram", TelegramController, :hook
   end
 end
