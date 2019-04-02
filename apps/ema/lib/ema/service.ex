@@ -7,6 +7,7 @@ defmodule Ema.Service do
   @env_function :__ema_env_check
 
   @action_prefix "__ema_action_"
+  @trigger_prefix "__ema_trigger_"
   @type_prefix "__ema_type_"
   @env_prefix "env_"
 
@@ -31,6 +32,12 @@ defmodule Ema.Service do
     else
       {:error, "#{service}: Action #{action} expects #{input_typename} but got #{inspect(input)}"}
     end
+  end
+
+  def run_trigger(service, trigger, input) do
+    # TODO type check trigger inputs?
+
+    service.trigger(trigger, input)
   end
 
   # Actions
@@ -64,6 +71,42 @@ defmodule Ema.Service do
     end)
     |> Enum.map(fn {fun, 0} ->
       name = String.replace_prefix("#{fun}", @action_prefix, "")
+      info = apply(service, fun, [])
+      {String.to_atom(name), info}
+    end)
+  end
+
+  # Triggers
+  defmacro trigger(trig, output, params, do: body) do
+    fun_name = :"#{@trigger_prefix}#{trig}"
+
+    info_ast =
+      quote do
+        def unquote(fun_name)() do
+          %{trigger: unquote(trig), output: unquote(output)}
+        end
+      end
+
+    params = Macro.escape(params)
+    body = Macro.escape(body, unquote: true)
+
+    trig_ast =
+      quote bind_quoted: [fun_name: fun_name, trig: trig, params: params, body: body] do
+        def trigger(unquote(trig), unquote(params)) do
+          unquote(body)
+        end
+      end
+
+    [info_ast, trig_ast]
+  end
+
+  def triggers(service) when is_atom(service) do
+    service.__info__(:functions)
+    |> Enum.filter(fn {fun, arity} ->
+      String.starts_with?("#{fun}", @trigger_prefix) and arity == 0
+    end)
+    |> Enum.map(fn {fun, 0} ->
+      name = String.replace_prefix("#{fun}", @trigger_prefix, "")
       info = apply(service, fun, [])
       {String.to_atom(name), info}
     end)

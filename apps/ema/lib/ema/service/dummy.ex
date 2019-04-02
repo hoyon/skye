@@ -12,6 +12,10 @@ defmodule Ema.Service.Dummy do
     name :string
   end
 
+  trigger :event, :name, %{request: r} do
+    {:ok, %{"name" => r}}
+  end
+
   action :echo, :message, :message, %{"text" => text} do
     {:ok, %{"text" => text}}
   end

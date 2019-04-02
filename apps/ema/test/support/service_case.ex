@@ -15,7 +15,7 @@ defmodule Ema.ServiceCase do
   @doc "Ensure action returns correct type for a given input"
   defmacro test_action(action, input, output) do
     quote do
-      test "#{@service}.#{unquote(action)} gives correct type" do
+      test "action #{@service}.#{unquote(action)} gives correct type" do
         service = @service
         action = unquote(action)
         input = unquote(input)
@@ -23,6 +23,23 @@ defmodule Ema.ServiceCase do
 
         output_typename = Service.actions(service)[action].output
         {:ok, result} = Service.run(service, action, input)
+        assert Type.check_type(result, service, output_typename)
+        assert result == output
+      end
+    end
+  end
+
+  @doc "Ensure trigger returns correct type for a given input"
+  defmacro test_trigger(trigger, input, output) do
+    quote do
+      test "trigger #{@service}.#{unquote(trigger)} gives correct type" do
+        service = @service
+        trigger = unquote(trigger)
+        input = unquote(input)
+        output = unquote(output)
+
+        output_typename = Service.triggers(service)[trigger].output
+        {:ok, result} = Service.run_trigger(service, trigger, input)
         assert Type.check_type(result, service, output_typename)
         assert result == output
       end

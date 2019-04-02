@@ -2,7 +2,7 @@ defmodule Ema.ServiceTest do
   use ExUnit.Case, async: true
 
   describe "metadata" do
-    defmodule Service do
+    defmodule Metadata do
       use Ema.Service
 
       name "a service"
@@ -10,20 +10,20 @@ defmodule Ema.ServiceTest do
     end
 
     test "creates function marking it as a service" do
-      assert Service.__ema_service()
+      assert Metadata.__ema_service()
     end
 
     test "name macro generates function" do
-      assert Service.__ema_name() == "a service"
+      assert Metadata.__ema_name() == "a service"
     end
 
     test "description macro generates function" do
-      assert Service.__ema_description() == "a description"
+      assert Metadata.__ema_description() == "a description"
     end
   end
 
   describe "actions" do
-    defmodule Service2 do
+    defmodule Actions do
       use Ema.Service
 
       action :echo, :string, :string, %{input: input} do
@@ -31,17 +31,35 @@ defmodule Ema.ServiceTest do
       end
     end
 
-    test "creates action function which input parameters" do
-      assert Service2.action(:echo, %{input: "hello"}) == {:ok, "hello"}
+    test "creates action function with input parameters" do
+      assert Actions.action(:echo, %{input: "hello"}) == {:ok, "hello"}
     end
 
     test "creates function which contains type information" do
-      assert Service2.__ema_action_echo() == %{action: :echo, input: :string, output: :string}
+      assert Actions.__ema_action_echo() == %{action: :echo, input: :string, output: :string}
+    end
+  end
+
+  describe "triggers" do
+    defmodule Triggers do
+      use Ema.Service
+
+      trigger :event, :string, %{request: request} do
+        {:ok, request}
+      end
+    end
+
+    test "creates trigger function with input parameters" do
+      assert Triggers.trigger(:event, %{request: "something happened"}) == {:ok, "something happened"}
+    end
+
+    test "creates function containing type infomation" do
+      assert Triggers.__ema_trigger_event() == %{trigger: :event, output: :string}
     end
   end
 
   describe "initialisation" do
-    defmodule Service3 do
+    defmodule Init do
       use Ema.Service
 
       env :service3, [:name]
@@ -49,20 +67,20 @@ defmodule Ema.ServiceTest do
 
     test "defines env check function" do
       Application.put_env(:ema, :service3, name: "bob")
-      assert :ok == Service3.__ema_env_check()
+      assert :ok == Init.__ema_env_check()
     end
 
     test "without env defined check function raises" do
       Application.put_env(:ema, :service3, nil)
 
       assert_raise RuntimeError, fn ->
-        Service3.__ema_env_check()
+        Init.__ema_env_check()
       end
     end
 
     test "defines function to get env variable" do
       Application.put_env(:ema, :service3, name: "bob")
-      assert Service3.env_name() == "bob"
+      assert Init.env_name() == "bob"
     end
   end
 end
