@@ -1,7 +1,9 @@
 defmodule Lana.TelegramController do
   use Lana, :controller
+  alias Ema.Service
 
   def hook(conn, params) do
+    Ema.Service.run_trigger(Ema.Service.Telegram, :got_message, params)
     text = params["message"]["text"]
     if text == "/services" do
       services =

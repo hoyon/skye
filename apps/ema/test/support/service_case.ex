@@ -39,7 +39,7 @@ defmodule Ema.ServiceCase do
         output = unquote(output)
 
         output_typename = Service.triggers(service)[trigger].output
-        {:ok, result} = Service.run_trigger(service, trigger, input)
+        assert {:ok, result} = Service.run_trigger(service, trigger, input)
         assert Type.check_type(result, service, output_typename)
         assert result == output
       end

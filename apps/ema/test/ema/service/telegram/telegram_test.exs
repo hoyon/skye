@@ -16,4 +16,15 @@ defmodule Ema.Service.TelegramTest do
     %{"sent_message" => "hello"}
   )
 
+  test_trigger(
+    :got_message,
+    %{
+      "message" => %{
+        "text" => "hello",
+        "from" => %{"first_name" => "bob"},
+        "chat" => %{"id" => 1}
+      }
+    },
+    %{"body" => "hello", "from" => "bob", "chat_id" => "1"}
+  )
 end
