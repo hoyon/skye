@@ -29,6 +29,10 @@ defmodule Ema.ServiceTest do
       action :echo, :string, :string, %{input: input} do
         {:ok, input}
       end
+
+      action :no_params, nil, :string do
+        {:ok, "value"}
+      end
     end
 
     test "creates action function with input parameters" do
@@ -37,6 +41,10 @@ defmodule Ema.ServiceTest do
 
     test "creates function which contains type information" do
       assert Actions.__ema_action_echo() == %{action: :echo, input: :string, output: :string}
+    end
+
+    test "params are optional" do
+      assert Actions.__ema_action_no_params() == %{action: :no_params, input: nil, output: :string}
     end
   end
 
