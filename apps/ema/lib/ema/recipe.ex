@@ -8,7 +8,7 @@ defmodule Ema.Recipe do
         {Ema.Service.Dummy, :greet, %{"name" => "Bob <{{username}}> Smith"}},
         {Ema.Service.Telegram, :send_message, %{"text" => "Message from Skye: {{text}}"}}
       ],
-      inputs: %{"user_id" => "4"}
+      inputs: %{"user_id" => "2"}
     }
   end
 
