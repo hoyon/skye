@@ -12,6 +12,7 @@ defmodule Lana.Application do
       supervisor(Lana.Endpoint, []),
       # Start your own worker by calling: Lana.Worker.start_link(arg1, arg2, arg3)
       # worker(Lana.Worker, [arg1, arg2, arg3]),
+      {Phoenix.PubSub, [name: Lana.PubSub, adapter: Phoenix.PubSub.PG2]}
     ]
 
     # See https://hexdocs.pm/elixir/Supervisor.html
