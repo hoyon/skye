@@ -21,6 +21,10 @@ defmodule Ema.RecipeTest do
       action :get_name, nil, :name do
         {:ok, %{"name" => "Steve"}}
       end
+
+      action :fail, nil, :message do
+        {:error, "Oh dear oh dear"}
+      end
     end
 
     test "can run a simple recipe" do
@@ -55,6 +59,28 @@ defmodule Ema.RecipeTest do
 
       result = Recipe.run(recipe)
       assert %{"text" => "Hello Steve!"} = result.state
+    end
+
+    test "raises if variable not found" do
+      recipe = %Recipe{
+        steps: [
+          {Greet, :greet, %{"name" => "{{name}}"}}
+        ]
+      }
+
+      assert_raise RuntimeError, ~r"name", fn ->
+        Recipe.run(recipe, %{})
+      end
+    end
+
+    test "can handle when service returns an error" do
+      recipe = %Recipe{
+        steps: [
+          {Greet, :error, %{}}
+        ]
+      }
+
+      {:error, _} = Recipe.run(recipe)
     end
   end
 end

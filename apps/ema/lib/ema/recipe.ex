@@ -6,7 +6,7 @@ defmodule Ema.Recipe do
     %__MODULE__{
       steps: [
         {Ema.Service.Placeholder, :get_user, %{"user_id" => "{{user_id}}"}},
-        {Ema.Service.Dummy, :greet, %{"name" => "Bob <{{username}}> Smith"}},
+        {Ema.Service.Dummy, :greet, %{"name" => "{{name}} aka {{username}}"}},
         {Ema.Service.Telegram, :send_message, %{"text" => "Message from Skye: {{text}}"}}
       ],
       state: %{"user_id" => "2"}
@@ -18,9 +18,9 @@ defmodule Ema.Recipe do
 
     Enum.reduce(recipe.steps, recipe, fn step, recipe ->
       trans = elem(step, 2)
-      input = run_transformation(trans, recipe.state)
+      state = run_transformation(trans, recipe.state)
 
-      {:ok, result} = Ema.run_sync(elem(step, 0), elem(step, 1), input)
+      {:ok, result} = Ema.run_sync(elem(step, 0), elem(step, 1), state)
 
       Map.update!(recipe, :state, &Map.merge(&1, result))
     end)
@@ -38,8 +38,19 @@ defmodule Ema.Recipe do
     Enum.reduce(ast, "", fn item, acc ->
       case item do
         {:str, string} -> acc <> string
-        {:expr, expression} -> acc <> Map.get(state, expression)
+        {:expr, expression} ->
+          acc <> get_val!(state, expression)
       end
     end)
+  end
+
+  defp get_val!(state, expression) do
+    if val = Map.get(state, expression) do
+      val
+    else
+      raise """
+      Variable #{expression} not found
+      """
+    end
   end
 end

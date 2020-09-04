@@ -23,8 +23,10 @@ defmodule Ema.Service.Placeholder.Api do
   def get_user(id) do
     {:ok, res} = get("/users/#{id}")
 
-    body = res.body
-
-    {:ok, %{"name" => body["name"], "username" => body["username"]}}
+    if res.status == 200 do
+      {:ok, %{"name" => res.body["name"], "username" => res.body["username"]}}
+    else
+      {:error, "Error"}
+    end
   end
 end
