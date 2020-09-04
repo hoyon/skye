@@ -3,11 +3,11 @@ defmodule Ema.ServiceCase do
   alias Ema.{Service, Type}
 
   using opts do
-    quote(bind_quoted: [opts: opts]) do
+    quote bind_quoted: [opts: opts] do
       import Ema.ServiceCase
       import Mox
 
-      @service Keyword.get(opts, :service)
+      @service Keyword.fetch!(opts, :service)
       test_service_sanity(@service)
     end
   end
