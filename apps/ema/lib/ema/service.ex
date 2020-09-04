@@ -27,7 +27,7 @@ defmodule Ema.Service do
   def run(service, action, input) do
     %{input: input_typename} = actions(service)[action]
 
-    if Type.check_type(input, service, input_typename) do
+    if is_nil(input_typename) or Type.check_type(input, service, input_typename) do
       service.action(action, input)
     else
       {:error, "#{service}: Action #{action} expects #{input_typename} but got #{inspect(input)}"}
@@ -41,7 +41,7 @@ defmodule Ema.Service do
   end
 
   # Actions
-  defmacro action(act, input, output, params, do: body) do
+  defmacro action(act, input, output, params \\ Macro.escape(%{}), do: body) do
     fun_name = :"#{@action_prefix}#{act}"
 
     info_ast =
