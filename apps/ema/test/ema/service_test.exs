@@ -62,25 +62,25 @@ defmodule Ema.ServiceTest do
     defmodule Init do
       use Ema.Service
 
-      env :service3, [:name]
+      env :service3, [:secret_token]
     end
 
     test "defines env check function" do
-      Application.put_env(:ema, :service3, name: "bob")
+      Application.put_env(:ema, :service3, secret_token: "bob")
       assert :ok == Init.__ema_env_check()
     end
 
     test "without env defined check function raises" do
       Application.put_env(:ema, :service3, nil)
 
-      assert_raise RuntimeError, fn ->
+      assert_raise RuntimeError, ~r"secret_token", fn ->
         Init.__ema_env_check()
       end
     end
 
     test "defines function to get env variable" do
-      Application.put_env(:ema, :service3, name: "bob")
-      assert Init.env_name() == "bob"
+      Application.put_env(:ema, :service3, secret_token: "bob")
+      assert Init.env_secret_token() == "bob"
     end
   end
 end

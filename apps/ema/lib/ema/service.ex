@@ -176,8 +176,16 @@ defmodule Ema.Service do
           |> Enum.map(fn v -> Keyword.get(set, v, nil) != nil end)
           |> Enum.all?(& &1)
           |> case do
-            true -> :ok
-            false -> raise "Required environment variables for #{__MODULE__} not defined"
+            true ->
+              :ok
+
+            false ->
+              raise """
+              Required environment variables for #{__MODULE__} not defined.
+
+              The following variables are required:
+              #{Enum.map(unquote(vars), &"- #{&1}\n")}
+              """
           end
         end
       end
