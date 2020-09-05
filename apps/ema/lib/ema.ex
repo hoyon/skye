@@ -4,7 +4,8 @@ defmodule Ema do
   end
 
   def yield_result(job) do
-    Honeydew.yield(job)
+    {:ok, result} = Honeydew.yield(job)
+    result
   end
 
   def run_sync(service, function, args) do

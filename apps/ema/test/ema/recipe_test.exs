@@ -34,7 +34,7 @@ defmodule Ema.RecipeTest do
         ]
       }
 
-      result = Recipe.run(recipe, %{})
+      {:ok, result} = Recipe.run(recipe, %{})
       assert result.state == %{"text" => "Hello Dolly!"}
     end
 
@@ -45,7 +45,7 @@ defmodule Ema.RecipeTest do
         ]
       }
 
-      result = Recipe.run(recipe, %{"first_name" => "Sally", "last_name" => "Smith"})
+      {:ok, result} = Recipe.run(recipe, %{"first_name" => "Sally", "last_name" => "Smith"})
       assert %{"text" => "Hello Sally Smith!"} = result.state
     end
 
@@ -57,7 +57,7 @@ defmodule Ema.RecipeTest do
         ]
       }
 
-      result = Recipe.run(recipe)
+      {:ok, result} = Recipe.run(recipe)
       assert %{"text" => "Hello Steve!"} = result.state
     end
 
@@ -76,11 +76,11 @@ defmodule Ema.RecipeTest do
     test "can handle when service returns an error" do
       recipe = %Recipe{
         steps: [
-          {Greet, :error, %{}}
+          {Greet, :fail, %{}}
         ]
       }
 
-      {:error, _} = Recipe.run(recipe)
+      assert {:error, "Oh dear oh dear"} == Recipe.run(recipe)
     end
   end
 end

@@ -16,13 +16,31 @@ defmodule Ema.Recipe do
   def run(%__MODULE__{} = recipe, inputs \\ %{}) when is_map(inputs) do
     recipe = Map.put(recipe, :state, inputs)
 
-    Enum.reduce(recipe.steps, recipe, fn step, recipe ->
+    case run_steps(recipe) do
+      {:error, error} ->
+        {:error, error}
+
+      result ->
+        {:ok, result}
+    end
+  end
+
+  defp run_steps(recipe) do
+    Enum.reduce_while(recipe.steps, recipe, fn step, recipe ->
       trans = elem(step, 2)
       state = run_transformation(trans, recipe.state)
 
-      {:ok, result} = Ema.run_sync(elem(step, 0), elem(step, 1), state)
+      run_result = Ema.run_sync(elem(step, 0), elem(step, 1), state)
 
-      Map.update!(recipe, :state, &Map.merge(&1, result))
+      case run_result do
+        {:ok, result} ->
+          recipe = Map.update!(recipe, :state, &Map.merge(&1, result))
+          {:cont, recipe}
+
+        {:error, error} ->
+          # TODO return result of previous successful steps
+          {:halt, {:error, error}}
+      end
     end)
   end
 
