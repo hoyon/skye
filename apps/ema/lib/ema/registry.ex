@@ -47,11 +47,8 @@ defmodule Ema.Registry do
   end
 
   def handle_call(:list_services, _from, %{table: table} = state) do
-    names =
-      :ets.tab2list(table)
-      |> Enum.map(fn s -> elem(s, 1).metadata end)
-
-    {:reply, names, state}
+    services = :ets.tab2list(table)
+    {:reply, services, state}
   end
 
   def handle_cast(:reload, %{table: table} = state) do
@@ -80,7 +77,8 @@ defmodule Ema.Registry do
     %{
       metadata: Ema.Service.metadata(service),
       types: Ema.Service.types(service),
-      actions: Ema.Service.actions(service)
+      actions: Ema.Service.actions(service),
+      triggers: Ema.Service.triggers(service),
     }
   end
 end
