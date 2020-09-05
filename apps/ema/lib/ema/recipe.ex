@@ -2,17 +2,6 @@ defmodule Ema.Recipe do
   defstruct steps: [], state: %{}
   alias Ema.Template
 
-  def recipe do
-    %__MODULE__{
-      steps: [
-        {Ema.Service.Placeholder, :get_user, %{"user_id" => "{{user_id}}"}},
-        {Ema.Service.Dummy, :greet, %{"name" => "{{name}} aka {{username}}"}},
-        {Ema.Service.Telegram, :send_message, %{"text" => "Message from Skye: {{text}}"}}
-      ],
-      state: %{"user_id" => "2"}
-    }
-  end
-
   def run(%__MODULE__{} = recipe, inputs \\ %{}) when is_map(inputs) do
     recipe = Map.put(recipe, :state, inputs)
 
