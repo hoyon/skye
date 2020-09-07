@@ -22,10 +22,10 @@ defmodule Lana.Router do
     json_codec: Jason,
     interface: :playground
 
-  forward "/webhook", Lana.WebhookPlug
-
   scope "/", Lana do
     pipe_through :api
+
+    post "/webhook/:service/:trigger", WebhookController, :run
     post "/telegram", TelegramController, :hook
   end
 end

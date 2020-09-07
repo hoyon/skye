@@ -15,7 +15,7 @@ defmodule Ema.ServiceCase do
   @doc "Ensure action returns correct type for a given input"
   defmacro test_action(action, input, output) do
     quote do
-      test "action #{@service}.#{unquote(action)} gives correct type" do
+      test "action #{@service}.#{unquote(action)} with input #{inspect(unquote(input))}" do
         service = @service
         action = unquote(action)
         input = unquote(input)
@@ -32,7 +32,7 @@ defmodule Ema.ServiceCase do
   @doc "Ensure trigger returns correct type for a given input"
   defmacro test_trigger(trigger, input, output) do
     quote do
-      test "trigger #{@service}.#{unquote(trigger)} gives correct type" do
+      test "trigger #{@service}.#{unquote(trigger)} with input #{inspect(unquote(input))}" do
         service = @service
         trigger = unquote(trigger)
         input = unquote(input)

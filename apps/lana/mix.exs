@@ -36,6 +36,7 @@ defmodule Lana.Mixfile do
   # Type `mix help deps` for examples and options.
   defp deps do
     [
+      {:ema, in_umbrella: true},
       {:phoenix, "~> 1.5"},
       {:phoenix_pubsub, "~> 2.0"},
       {:phoenix_html, "~> 2.10"},
